@@ -1,0 +1,9 @@
+services:
+  mini_wallet_db:
+    image: mysql:8.0
+    container_name: mini_wallet_db_container
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersecretpassword
+      - MYSQL_DATABASE=mini_wallet
