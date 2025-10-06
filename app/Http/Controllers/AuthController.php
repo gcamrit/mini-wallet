@@ -30,34 +30,32 @@ class AuthController
 
         return new JsonResponse([], Response::HTTP_CREATED);
     }
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
         if (Auth::attempt($credentials)) {
-            $user = $request->user();
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $request->session()->regenerate();
 
-            return new JsonResponse([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
+            return response()->noContent();
         }
 
         return new JsonResponse([
-            'message' => 'Invalid login details'
-        ], 401);
+            'message' => 'Invalid credentials',
+        ], Response::HTTP_UNAUTHORIZED);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return new JsonResponse([
-            'message' => 'Successfully logged out'
-        ]);
+        return response()->noContent();
     }
-    public function whoami(Request $request) {
+
+    public function whoami(Request $request)
+    {
         return $request->user();
     }
 }
