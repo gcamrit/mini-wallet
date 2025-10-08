@@ -9,4 +9,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/whoami',[AuthController::class, 'whoami']);
 
     Route::get('/transactions', [TransactionController::class, 'index']);
+    Route::post('/transactions', [TransactionController::class, 'store']);
 });
