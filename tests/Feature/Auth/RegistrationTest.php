@@ -6,7 +6,7 @@ use App\Models\User;
 pest()->use(RefreshDatabase::class);
 
 test("a user can create an account", function () {
-    $response = $this->postJson('/api/register', [
+    $response = $this->postJson('/register', [
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password',
@@ -24,7 +24,7 @@ test("a user can create an account", function () {
 test("a user can't register with existing email", function () {
     User::factory()->create(['email' => 'test@example.com']);
 
-    $response = $this->postJson('/api/register', [
+    $response = $this->postJson('/register', [
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password',
@@ -37,7 +37,7 @@ test("a user can't register with existing email", function () {
 });
 
 test('a user cannot register with a password confirmation that does not match', function () {
-    $response = $this->postJson('/api/register', [
+    $response = $this->postJson('/register', [
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password',

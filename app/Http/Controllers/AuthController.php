@@ -35,7 +35,7 @@ class AuthController
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+            session()->regenerate();
 
             return response()->noContent();
         }
@@ -48,8 +48,8 @@ class AuthController
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        session()->invalidate();
+        session()->regenerateToken();
 
         return response()->noContent();
     }

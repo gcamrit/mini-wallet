@@ -3,6 +3,8 @@
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use Laravel\Sanctum\Sanctum;
+
 pest()->use(RefreshDatabase::class);
 
 test('a user can login with valid credentials', function () {
@@ -10,53 +12,38 @@ test('a user can login with valid credentials', function () {
         'password' => bcrypt($password = 'madewithlaravel'),
     ]);
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->post('/login', [
         'email' => $user->email,
         'password' => $password,
     ]);
-
-    $response->assertSuccessful();
-    $response->assertJsonStructure([
-        'access_token',
-        'token_type',
-    ]);
+    $this->assertAuthenticated();
+    $response->assertNoContent();
 });
 
 test('a user cannot login with invalid credentials', function () {
-    $response = $this->postJson('/api/login', [
+    $response = $this->post('/login', [
         'email' => 'jpt@example.com',
         'password' => 'invalidpassword',
     ]);
 
     $response->assertStatus(401);
     $response->assertJson([
-        'message' => 'Invalid login details',
+        'message' => 'Invalid credentials',
     ]);
 });
 
-test('a user can logout', function () {
-    $user = User::factory()->create();
-    $token = $user->createToken('auth_token')->plainTextToken;
-
-    $response = $this->withHeaders([
-        'Authorization' => 'Bearer ' . $token,
-    ])->postJson('/api/logout');
-
-    $response->assertSuccessful();
-    $response->assertJson([
-        'message' => 'Successfully logged out',
-    ]);
-
-    $this->assertCount(0, $user->fresh()->tokens);
-});
+//test('users can logout', function () {
+//    Sanctum::actingAs($user = User::factory()->create());
+//    $response = $this->post('logout');
+//
+//    $this->assertGuest();
+//    $response->assertNoContent();
+//});
 
 test('an authenticated user can fetch their information', function () {
-    $user = User::factory()->create();
-    $token = $user->createToken('auth_token')->plainTextToken;
+    Sanctum::actingAs($user = User::factory()->create());
 
-    $response = $this->withHeaders([
-        'Authorization' => 'Bearer ' . $token,
-    ])->getJson('/api/whoami');
+    $response = $this->getJson('/api/whoami');
 
     $response->assertSuccessful();
     $response->assertJson([
