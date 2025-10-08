@@ -24,6 +24,7 @@ class AuthController
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
+            'balance' => 1000,
         ]);
 
         event(new Registered($user));
