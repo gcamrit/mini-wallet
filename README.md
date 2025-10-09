@@ -108,3 +108,4 @@ composer test
 - frontend: user feedback messages
 - backend: add logging on transfer service
 - backend: define common error message structure
+- ci : implement github action for basic checks
