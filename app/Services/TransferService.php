@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\TransferSuccessful;
 use App\Exceptions\InsufficientBalanceException;
 use App\Models\Transaction;
 use App\Models\User;
@@ -33,6 +34,7 @@ class TransferService
 
             $sender->update(['balance' => $sender->balance - $totalDebitAmount]);
             $receiver->update(['balance' => $receiver->balance + $amount]);
+            event(new TransferSuccessful($transaction));
         });
     }
 }

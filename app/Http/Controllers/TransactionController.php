@@ -25,7 +25,12 @@ class TransactionController
             ->with(['sender:id,name', 'receiver:id,name'])
             ->latest()
             ->paginate(25)
-            ->toResourceCollection();
+            ->toResourceCollection()
+            ->additional([
+                'meta' => [
+                    'balance' => $request->user()->balance,
+                ]
+            ]);
     }
     public function store(Request $request, TransferService $transferService)
     {

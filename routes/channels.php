@@ -1,8 +1,6 @@
 <?php
 
+use App\Broadcasting\TransactionChannel;
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});
-Broadcast::channel('transactions.{id}', \App\Broadcasting\TransactionChannel::class);
+Broadcast::channel('user.{id}.transactions', TransactionChannel::class);
