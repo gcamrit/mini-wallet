@@ -29,7 +29,7 @@ export default function useAuth() {
     const logout = async () => {
         try {
             await axios.post('/logout');
-            user.value = null;
+            user.value = undefined;
             await router.push('/login');
         } catch (e) {
             console.error('Failed to logout', e);

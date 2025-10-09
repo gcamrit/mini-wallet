@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import useUser from "../composables/useUser";
 import useCurrency from "../composables/useCurrency";
 

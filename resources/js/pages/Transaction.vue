@@ -6,8 +6,10 @@ import BalanceCard from "@/components/BalanceCard.vue";
 import useCurrency from "@/composables/useCurrency";
 
 const {user} = useUser();
-const {transactions, fetchTransactions} = useTransaction();
+const {transactions, fetchTransactions, initializeTransactionListener} = useTransaction();
 const {formatCurrency} = useCurrency();
+
+initializeTransactionListener()
 
 onMounted(() => {
     fetchTransactions();

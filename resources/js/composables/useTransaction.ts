@@ -36,7 +36,35 @@ export default function useTransaction() {
     const api = useApi();
     const {user, incrementBalance, decrementBalance} = useUser();
 
+    const { listen } = useEcho<TransferSuccessfulEvent>(
+        `user.${user.value?.id}.transactions`,
+        "TransferSuccessful",
+        (e) => {
+            console.log(e.transaction)
+            const exist = transactions.value.find((t) => t.id === e.transaction.id)
+            const t = {
+                id: e.transaction.id,
+                type: e.transaction.sender.id == user.value?.id ? "SENT" : "RECEIVED" as TransactionType,
+                amount: e.transaction.amount,
+                party: e.transaction.sender.id == user.value?.id ? e.transaction.receiver : e.transaction.sender,
+                created_at: e.transaction.created_at,
+            } as Transaction;
 
+            if(!exist) {
+                transactions.value.unshift(t);
+            }
+            if (user.value) {
+                switch (t.type) {
+                    case "RECEIVED":
+                        incrementBalance(Number(e.transaction.amount));
+                        break;
+                    case "SENT":
+                        decrementBalance(Number(e.transaction.amount) + Number(e.transaction.commission_amount));
+                        break;
+                }
+            }
+        }
+    );
     const fetchTransactions = async () => {
         try {
             const response = await api.get<{ data: Transaction[] }>("/transactions");
@@ -62,36 +90,8 @@ export default function useTransaction() {
     };
 
     const initializeTransactionListener = () => {
-        if (!user.value) return;
-        useEcho<TransferSuccessfulEvent>(
-            `user.${user.value?.id}.transactions`,
-            "TransferSuccessful",
-            (e) => {
-                console.log(e.transaction)
-                const exist = transactions.value.find((t) => t.id === e.transaction.id)
-                const t = {
-                    id: e.transaction.id,
-                    type: e.transaction.sender.id == user.value?.id ? "SENT" : "RECEIVED" as TransactionType,
-                    amount: e.transaction.amount,
-                    party: e.transaction.sender.id == user.value?.id ? e.transaction.receiver : e.transaction.sender,
-                    created_at: e.transaction.created_at,
-                } as Transaction;
-
-                if(!exist) {
-                    transactions.value.unshift(t);
-                }
-                if (user.value) {
-                    switch (t.type) {
-                        case "RECEIVED":
-                            incrementBalance(Number(e.transaction.amount));
-                            break;
-                        case "SENT":
-                            decrementBalance(Number(e.transaction.amount) + Number(e.transaction.commission_amount));
-                            break;
-                    }
-                }
-            }
-        );
+        if (!user) return;
+        listen()
     };
 
     return {

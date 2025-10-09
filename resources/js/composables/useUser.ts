@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import useApi from './useApi';
 import {AxiosError} from "axios";
+import {useRouter} from "vue-router";
 
 export interface User {
     id: number;
@@ -9,13 +10,14 @@ export interface User {
     balance: number;
 }
 
-const user = ref<User | null>(null);
+const user = ref<User>();
 
 export default function useUser() {
     const api = useApi();
 
     const fetchUser = async () => {
         if (user.value) {
+            console.log('am i here ???')
             return;
         }
         try {
@@ -24,7 +26,7 @@ export default function useUser() {
         } catch (e) {
             const err = e as AxiosError
             if (err.response?.status === 401) {
-                // Not authenticated
+                user.value = undefined;
             }
         }
     };

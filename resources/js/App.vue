@@ -1,20 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import useUser from "./composables/useUser";
 import useAuth from "./composables/useAuth";
-import useTransaction from "./composables/useTransaction";
-import BalanceCard from "@/components/BalanceCard.vue";
-import {watch} from "vue";
 import {useToast} from "@/composables/useToaster.js";
 import Toast from "@/components/Toast.vue";
 
-const {user} = useUser();
 const {logout} = useAuth();
-const {initializeTransactionListener} = useTransaction();
+const {user} = useUser();
 const { toasts, removeToast } = useToast();
 
-watch(user, () => {
-    initializeTransactionListener()
-}, {immediate: true})
 </script>
 <template>
     <div class="min-h-screen bg-gray-100">
@@ -34,9 +27,6 @@ watch(user, () => {
                         </RouterLink>
                         <button v-if="user" @click="logout" class="text-gray-500 hover:text-gray-700">Logout</button>
                     </nav>
-                    <template v-if="user">
-                        <BalanceCard :balance="Number(user.balance)"/>
-                    </template>
                 </div>
             </div>
         </header>
@@ -48,7 +38,14 @@ watch(user, () => {
     </div>
     <Teleport to="body">
         <div class="fixed bottom-0 right-0">
-            <Toast v-for="toast in toasts" :message="toast.message" :duration="toast.duration" :key="toast.id" :type="toast.type" @close="removeToast(toast.id)" />
+            <Toast
+                v-for="toast in toasts"
+                :message="toast.message"
+                :duration="toast.duration"
+                :key="toast.id"
+                :type="toast.type"
+                @close="removeToast(toast.id)"
+            />
         </div>
     </Teleport>
 </template>
