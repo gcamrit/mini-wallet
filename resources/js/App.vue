@@ -4,10 +4,13 @@ import useAuth from "./composables/useAuth";
 import useTransaction from "./composables/useTransaction";
 import BalanceCard from "@/components/BalanceCard.vue";
 import {watch} from "vue";
+import {useToast} from "@/composables/useToaster.js";
+import Toast from "@/components/Toast.vue";
 
 const {user} = useUser();
 const {logout} = useAuth();
 const {initializeTransactionListener} = useTransaction();
+const { toasts, removeToast } = useToast();
 
 watch(user, () => {
     initializeTransactionListener()
@@ -43,4 +46,9 @@ watch(user, () => {
             </div>
         </main>
     </div>
+    <Teleport to="body">
+        <div class="fixed bottom-0 right-0">
+            <Toast v-for="toast in toasts" :message="toast.message" :duration="toast.duration" :key="toast.id" :type="toast.type" @close="removeToast(toast.id)" />
+        </div>
+    </Teleport>
 </template>

@@ -3,6 +3,9 @@ import { ref } from "vue";
 import useTransaction from "@/composables/useTransaction";
 import TransferForm from "@/components/TransferForm.vue";
 import {useRouter} from "vue-router";
+import {useToast} from "@/composables/useToaster";
+
+const { success, error } = useToast();
 
 const router = useRouter();
 
@@ -16,9 +19,11 @@ const sendTransfer = async (formData: { recipient_id: string; amount: number }) 
     try {
         await createTransaction(formData.recipient_id, formData.amount);
         form.value = {recipient_id: "", amount: ""};
+        success("Transfer successfull.")
         await router.push({path: "/transactions"})
-    } catch (error) {
-        console.error("Transfer failed:", error);
+    } catch (err) {
+        error("Oops, Something went wrong!!!")
+        console.error("Transfer failed:", err);
     }
 };
 </script>
