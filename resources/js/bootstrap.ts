@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { router } from "./routes";
-axios.defaults.baseURL = 'http://localhost:8000'
+import { configureEcho } from "@laravel/echo-vue";
+
 
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
@@ -14,3 +15,24 @@ axios.interceptors.response.use((response) => {
 
     throw error;
 })
+
+configureEcho({
+    broadcaster: 'pusher',
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    encrypted: true,
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('api/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                }).then(response => {
+                    callback(false, response.data);
+                }).catch(error => {
+                    callback(true, error);
+                });
+            }
+        };
+    },
+});
