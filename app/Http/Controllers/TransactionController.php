@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Rules\HasSufficientBalance;
 use App\Services\TransferService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -36,7 +37,12 @@ class TransactionController
     {
         $validatedData = $request->validate([
             'recipient_id' => 'required|exists:users,id',
-            'amount' => 'required|numeric|min:0.01',
+            'amount' => [
+                'required',
+                'numeric',
+                'min:0.01',
+                new HasSufficientBalance($request->user()),
+            ],
         ]);
 
         $transferService->transfer(
