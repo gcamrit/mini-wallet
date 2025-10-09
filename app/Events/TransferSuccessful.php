@@ -41,6 +41,7 @@ class TransferSuccessful implements ShouldBroadcast, ShouldDispatchAfterCommit
             'transaction' => [
                 'id' => $this->transaction->id,
                 'amount' => $this->transaction->amount,
+                'commission_amount' => $this->transaction->commission_fee,
                 'sender' => [
                     'id' => $this->transaction->sender->id,
                     'name' => $this->transaction->sender->name,
