@@ -1,10 +1,21 @@
 <script setup>
 import useUser from "./composables/useUser";
 import useAuth from "./composables/useAuth";
+import useTransaction from "./composables/useTransaction";
 import BalanceCard from "@/components/BalanceCard.vue";
+import {watch} from "vue";
 
 const {user} = useUser();
 const {logout} = useAuth();
+const {initializeTransactionListener} = useTransaction();
+
+watch(
+    user,
+    () => {
+        initializeTransactionListener();
+    },
+    {immediate: true}
+);
 </script>
 <template>
     <div class="min-h-screen bg-gray-100">

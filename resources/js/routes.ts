@@ -2,6 +2,7 @@ import { createRouter, createWebHistory} from "vue-router";
 import Login from "./pages/Login.vue";
 import Register from "./pages/Register.vue";
 import Dashboard from "./pages/Dashboard.vue";
+import Transaction from "./pages/Transaction.vue";
 import useUser from "@/composables/useUser";
 
 
@@ -10,6 +11,12 @@ const routes = [
         path: '/',
         name: 'Dashboard',
         component: Dashboard,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/transactions',
+        name: 'Transactions',
+        component: Transaction,
         meta: { requiresAuth: true }
     },
     {
