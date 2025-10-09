@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import useAuth from "../composables/useAuth";
-import { onMounted } from "vue";
+import useUser from "../composables/useUser";
+import useCurrency from "../composables/useCurrency";
 
-const { user, getUser, logout } = useAuth();
-
-onMounted(async () => {
-    await getUser();
-});
+const { user } = useUser();
+const { formatCurrency } = useCurrency();
 </script>
 
 <template>
     <div>
-        <h1>Dashboard</h1>
+        <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
         <div v-if="user">
-            <p>Name: {{ user.name }}</p>
-            <p>Email: {{ user.email }}</p>
-            <button @click="logout">Logout</button>
+            <p class="mb-2">Name: {{ user.name }}</p>
+            <p class="mb-2">Email: {{ user.email }}</p>
+            <p class="mb-2">Balance: {{ formatCurrency(user.balance) }}</p>
         </div>
     </div>
 </template>
