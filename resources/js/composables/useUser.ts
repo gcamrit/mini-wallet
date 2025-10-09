@@ -37,13 +37,13 @@ export default function useUser() {
 
     const incrementBalance = (amount: number) => {
         if (user.value) {
-            user.value.balance += amount;
+            user.value.balance = Number(user.value.balance) + amount;
         }
     }
 
     const decrementBalance = (amount: number) => {
         if (user.value) {
-            user.value.balance -= amount;
+            user.value.balance = Number(user.value.balance) - amount;
         }
     }
 

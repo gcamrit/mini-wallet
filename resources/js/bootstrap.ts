@@ -1,5 +1,9 @@
 import axios from 'axios';
 import { configureEcho } from "@laravel/echo-vue";
+import useUser from "@/composables/useUser";
+
+const { fetchUser } = useUser();
+await fetchUser();
 
 
 configureEcho({
@@ -10,7 +14,7 @@ configureEcho({
     authorizer: (channel, options) => {
         return {
             authorize: (socketId, callback) => {
-                axios.post('broadcasting/auth', {
+                axios.post('/broadcasting/auth', {
                     socket_id: socketId,
                     channel_name: channel.name
                 }).then(response => {

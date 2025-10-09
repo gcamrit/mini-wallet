@@ -3,6 +3,7 @@ import Login from "./pages/Login.vue";
 import Register from "./pages/Register.vue";
 import Dashboard from "./pages/Dashboard.vue";
 import Transaction from "./pages/Transaction.vue";
+import Transfer from "./pages/Transfer.vue";
 import useUser from "@/composables/useUser";
 
 
@@ -17,6 +18,12 @@ const routes = [
         path: '/transactions',
         name: 'Transactions',
         component: Transaction,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/transactions/transfer',
+        name: 'Transfer',
+        component: Transfer,
         meta: { requiresAuth: true }
     },
     {
@@ -38,9 +45,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const { user, fetchUser } = useUser();
-
     if (to.meta.requiresAuth && !user.value) {
-        await fetchUser();
         if (!user.value) {
             next('/login');
         } else {

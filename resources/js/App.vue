@@ -9,13 +9,9 @@ const {user} = useUser();
 const {logout} = useAuth();
 const {initializeTransactionListener} = useTransaction();
 
-watch(
-    user,
-    () => {
-        initializeTransactionListener();
-    },
-    {immediate: true}
-);
+watch(user, () => {
+    initializeTransactionListener()
+}, {immediate: true})
 </script>
 <template>
     <div class="min-h-screen bg-gray-100">

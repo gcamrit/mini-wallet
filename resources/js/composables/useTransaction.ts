@@ -32,6 +32,7 @@ export interface TransferSuccessfulEvent {
 const transactions = ref<Transaction[]>([]);
 
 export default function useTransaction() {
+
     const api = useApi();
     const {user, incrementBalance, decrementBalance} = useUser();
 
@@ -66,6 +67,8 @@ export default function useTransaction() {
             `user.${user.value?.id}.transactions`,
             "TransferSuccessful",
             (e) => {
+                console.log(e.transaction)
+                const exist = transactions.value.find((t) => t.id === e.transaction.id)
                 const t = {
                     id: e.transaction.id,
                     type: e.transaction.sender.id == user.value?.id ? "SENT" : "RECEIVED" as TransactionType,
@@ -73,7 +76,10 @@ export default function useTransaction() {
                     party: e.transaction.sender.id == user.value?.id ? e.transaction.receiver : e.transaction.sender,
                     created_at: e.transaction.created_at,
                 } as Transaction;
-                transactions.value.unshift(t);
+
+                if(!exist) {
+                    transactions.value.unshift(t);
+                }
                 if (user.value) {
                     switch (t.type) {
                         case "RECEIVED":
