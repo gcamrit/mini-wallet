@@ -34,7 +34,7 @@ const value = computed({
             :type="type"
             :placeholder="placeholder"
             :disabled="disabled"
-            class="rounded outline outline-zinc-300 px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="rounded outline outline-zinc-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
         />
         <p v-if="error" class="text-sm text-red-500">{{ error }}</p>
     </div>

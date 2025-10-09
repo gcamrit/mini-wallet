@@ -2,17 +2,30 @@
 import useUser from "../composables/useUser";
 import { onMounted, ref } from "vue";
 import useTransaction from "@/composables/useTransaction";
+import TransferForm from "@/components/TransferForm.vue";
 import BalanceCard from "@/components/BalanceCard.vue";
 import useCurrency from "@/composables/useCurrency";
 
 const { user } = useUser();
-const { transactions, fetchTransactions } = useTransaction();
+const { transactions, createTransaction, fetchTransactions } = useTransaction();
 const { formatCurrency } = useCurrency();
+const form = ref({
+    recipient_id: "",
+    amount: "",
+});
 
 onMounted(async () => {
     await fetchTransactions();
 });
 
+const sendTransfer = async (formData: { recipient_id: string; amount: number }) => {
+    try {
+        await createTransaction(formData.recipient_id, formData.amount);
+        form.value = {recipient_id: "", amount: ""};
+    } catch (error) {
+        console.error("Transfer failed:", error);
+    }
+};
 </script>
 
 <template>
@@ -22,7 +35,7 @@ onMounted(async () => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <h2 class="text-xl font-semibold mb-2">New Transfer</h2>
-                    transfer form here...
+                    <TransferForm @submit="sendTransfer"/>
                 </div>
                 <div>
                     <BalanceCard :balance="Number(user?.balance)"/>
