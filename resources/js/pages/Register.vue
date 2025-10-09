@@ -37,7 +37,7 @@ const handleRegister = async () => {
             <Input type="password" label="Password" v-model="password" :error="errors?.password" />
             <Input type="password" label="Password Confirm" v-model="password_confirmation" />
             <div>
-                <button type="submit">Submit</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
             </div>
         </form>
     </div>

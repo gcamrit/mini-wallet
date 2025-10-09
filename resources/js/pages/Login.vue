@@ -21,14 +21,13 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center min-w-8xl ">
+    <div class="flex flex-col items-center max-w-7xl ">
         <h1 class="text-blue-600">Login Page</h1>
-
         <form @submit.prevent="handleLogin" class="space-y-4">
-            <Input type="email" label="Email" v-model="email" :error="error" />
+            <Input type="email" label="Email" v-model="email" :error="error || undefined" />
             <Input type="password" label="Password" v-model="password" />
             <div>
-                <button type="submit">Submit</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
             </div>
         </form>
     </div>
