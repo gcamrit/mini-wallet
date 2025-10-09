@@ -107,3 +107,4 @@ composer test
 - frontend: add pagination on transactions list page
 - frontend: user feedback messages
 - backend: add logging on transfer service
+- backend: define common error message structure

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\TransferSuccessful;
 use App\Exceptions\InsufficientBalanceException;
+use App\Exceptions\SameUserTransferException;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,10 @@ class TransferService
     public function transfer($senderId, $receiverId, $amount)
     {
         DB::transaction(function () use ($senderId, $receiverId, $amount) {
+            if ($senderId === $receiverId) {
+                throw new SameUserTransferException('You cannot transfer money to yourself.');
+            }
+
             $commissionAmount = round($amount * self::COMMISSION_RATE, 2);
             $totalDebitAmount = $amount + $commissionAmount;
 

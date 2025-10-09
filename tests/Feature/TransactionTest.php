@@ -66,3 +66,12 @@ it('cannot create a transaction with insufficient balance', function () {
         'amount' => 100,
     ])->assertStatus(422);
 });
+
+it('cannot transfer money to himself', function () {
+    Sanctum::actingAs($user = User::factory()->create(['balance' => 1000]));
+
+    postJson('/api/transactions', [
+        'recipient_id' => $user->id,
+        'amount' => 100,
+    ])->assertStatus(500);
+});
