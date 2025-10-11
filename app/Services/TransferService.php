@@ -16,7 +16,7 @@ class TransferService
     public function transfer($senderId, $receiverId, $amount)
     {
         DB::transaction(function () use ($senderId, $receiverId, $amount) {
-            if ($senderId === $receiverId) {
+            if ((int)$senderId === (int)$receiverId) {
                 throw new SameUserTransferException('You cannot transfer money to yourself.');
             }
 
