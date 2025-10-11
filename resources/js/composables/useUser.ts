@@ -1,7 +1,6 @@
 import { ref } from 'vue';
 import useApi from './useApi';
 import {AxiosError} from "axios";
-import {useRouter} from "vue-router";
 
 export interface User {
     id: number;

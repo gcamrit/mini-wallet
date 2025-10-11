@@ -4,6 +4,7 @@ import {onMounted} from "vue";
 import useTransaction from "@/composables/useTransaction";
 import BalanceCard from "@/components/BalanceCard.vue";
 import useCurrency from "@/composables/useCurrency";
+import TransactionType from "@/components/TransactionType.vue";
 
 const {user} = useUser();
 const {transactions, fetchTransactions, initializeTransactionListener} = useTransaction();
@@ -50,15 +51,7 @@ onMounted(() => {
                         class="border-b border-gray-200 hover:bg-gray-50 transition"
                     >
                         <td class="py-2 px-3 font-medium">
-                              <span
-                                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold"
-                                  :class="{
-                                  'bg-green-100 text-green-700':  transaction.type === 'RECEIVED',
-                                  'bg-red-100 text-red-700':  transaction.type === 'SENT',
-                                }"
-                              >
-                                {{ transaction.type }}
-                              </span>
+                            <TransactionType :type="transaction.type" />
                         </td>
 
                         <td class="py-2 px-3 text-gray-800">

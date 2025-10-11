@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use App\Rules\HasSufficientBalance;
 use App\Services\TransferService;
@@ -26,17 +27,26 @@ class TransactionController
             ->with(['sender:id,name', 'receiver:id,name'])
             ->latest()
             ->paginate(25)
-            ->toResourceCollection()
+            ->toResourceCollection(TransactionResource::class)
             ->additional([
                 'meta' => [
                     'balance' => $request->user()->balance,
                 ]
             ]);
     }
+
     public function store(Request $request, TransferService $transferService)
     {
         $validatedData = $request->validate([
-            'recipient_id' => 'required|exists:users,id',
+            'recipient_id' => [
+                'required',
+                'exists:users,id',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($value !== $request->user()->id) {
+                        $fail('You cannot transfer money to yourself.');
+                    }
+                }
+            ],
             'amount' => [
                 'required',
                 'numeric',

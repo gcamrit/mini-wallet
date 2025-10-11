@@ -30,8 +30,8 @@ class TransferSuccessful implements ShouldBroadcast, ShouldDispatchAfterCommit
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('user.' . $this->transaction->sender_id. '.transactions'),
-            new PrivateChannel('user.' . $this->transaction->receiver_id. '.transactions'),
+            new PrivateChannel('user.' . $this->transaction->sender_id . '.transactions'),
+            new PrivateChannel('user.' . $this->transaction->receiver_id . '.transactions'),
         ];
     }
 

@@ -12,7 +12,7 @@ const { toasts, removeToast } = useToast();
 <template>
     <div class="min-h-screen bg-gray-100">
         <header class="bg-white shadow">
-            <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto py-4 px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center">
                     <h1 class="text-3xl font-bold text-gray-900">Mini Wallet</h1>
                     <nav class="flex gap-4">

@@ -39,7 +39,7 @@ const handleRegister = async () => {
             <Input type="text" label="Full Name" v-model="name" :error="errors.name[0]" />
             <Input type="email" label="Email" v-model="email" :error="errors.email[0]" />
             <Input type="password" label="Password" v-model="password" :error="errors.password[0]" />
-            <Input type="password" label="Password Confirm" v-model="password_confirmation[0]" />
+            <Input type="password" label="Password Confirm" v-model="password_confirmation" />
             <div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
             </div>

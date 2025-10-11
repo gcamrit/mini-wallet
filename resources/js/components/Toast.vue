@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref, onMounted, type PropType } from 'vue';
-import type {ToastType} from "@/composables/useToaster";
+import { computed, ref, onMounted, type PropType } from 'vue';
+import type { ToastType } from "@/composables/useToaster";
 
 const props = defineProps({
     message: {
