@@ -8,6 +8,7 @@ use App\Rules\HasSufficientBalance;
 use App\Services\TransferService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class TransactionController
@@ -42,7 +43,8 @@ class TransactionController
                 'required',
                 'exists:users,id',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($value !== $request->user()->id) {
+                    Log::debug("user input {$value}  current user : {$request->user()->id}");
+                    if ($value == $request->user()->id) {
                         $fail('You cannot transfer money to yourself.');
                     }
                 }

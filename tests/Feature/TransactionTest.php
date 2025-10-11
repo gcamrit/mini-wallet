@@ -73,5 +73,5 @@ it('cannot transfer money to himself', function () {
     postJson('/api/transactions', [
         'recipient_id' => $user->id,
         'amount' => 100,
-    ])->assertStatus(500);
+    ])->assertStatus(422);
 });
