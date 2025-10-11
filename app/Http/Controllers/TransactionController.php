@@ -43,7 +43,6 @@ class TransactionController
                 'required',
                 'exists:users,id',
                 function ($attribute, $value, $fail) use ($request) {
-                    Log::debug("user input {$value}  current user : {$request->user()->id}");
                     if ($value == $request->user()->id) {
                         $fail('You cannot transfer money to yourself.');
                     }
