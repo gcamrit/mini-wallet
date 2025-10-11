@@ -6,7 +6,6 @@ import Transaction from "./pages/Transaction.vue";
 import Transfer from "./pages/Transfer.vue";
 import useUser from "@/composables/useUser";
 
-
 const routes = [
     {
         path: '/',
@@ -44,16 +43,15 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    const { user, fetchUser } = useUser();
-    if (to.meta.requiresAuth && !user.value) {
-        if (!user.value) {
-            next('/login');
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
+    const guestRoutes = ['/login', '/register']
+
+    const { user } = useUser();
+    const isAuthenticated = !!user.value
+    const isGuestRoute = guestRoutes.includes(to.path)
+
+    if (isAuthenticated && isGuestRoute) return next('/')
+    if (!isAuthenticated && !isGuestRoute) return next('/login')
+    next()
 });
 
 export { router };
